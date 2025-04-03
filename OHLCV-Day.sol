@@ -6,10 +6,10 @@ contract OHLCVDay {
         //precent = ((open/close)-1)*100
         string symbol;
         uint openTime;
-        string open;
-        string high;
-        string low;
-        string close;
+        uint open;
+        uint high;
+        uint low;
+        uint close;
         string volume;
         uint closeTime;
         string quoteAssetVolume;
@@ -18,12 +18,20 @@ contract OHLCVDay {
         string takerBuyQuoteVol;
     }
 
+    struct PriceRecord {
+        uint time;
+        uint price;
+    }
+
     // Mapping thời gian -> string symbol -> FormData
     mapping(uint256 => mapping(string => FormData)) internal Records;
 
+    //mapping symbol -> gia cao nhất
+    mapping(string => PriceRecord) public highestPrice;
+    mapping(string => PriceRecord) public lowestPrice;
+    
     //Lưu tên symbol 
     mapping(string => uint256) internal symbolID;
-
     string[] allSymbols;
 
     event Recorded(
@@ -53,6 +61,14 @@ contract OHLCVDay {
         uint256 timeIndex = getTimeKey(formData.openTime);
 
         Records[timeIndex][formData.symbol]= formData;
+
+        if (formData.high > highestPrice[formData.symbol].price) {
+            highestPrice[formData.symbol] = PriceRecord(formData.openTime, formData.high);
+        }
+
+        if (lowestPrice[formData.symbol].price == 0 || formData.low < lowestPrice[formData.symbol].price) {
+            lowestPrice[formData.symbol] = PriceRecord(formData.openTime, formData.low);
+        }
 
         emit Recorded(formData);
     }

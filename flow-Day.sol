@@ -31,7 +31,7 @@ contract FlowTrackerByDay {
         flow.incoming = incoming;
         flow.outgoing = outgoing;
         flow.balance = balance;
-        flow.timestamp =formatKey;
+        flow.timestamp = formatKey;
 
         emit FlowTotalRecorded(formatKey, tokenSymbol, exchangeName, incoming, outgoing, balance );
     }

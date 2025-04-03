@@ -5,10 +5,10 @@ contract OHLCVWeek {
     struct FormData {
         string symbol;
         uint openTime;
-        string open;
-        string high;
-        string low;
-        string close;
+        uint open;
+        uint high;
+        uint low;
+        uint close;
         string volume;
         uint closeTime;
         string quoteAssetVolume;
