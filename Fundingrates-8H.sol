@@ -3,10 +3,10 @@ pragma solidity ^0.8.0;
 
 contract FundingRates8H {
     struct FlowData {
+        string symbol;
         uint timestamp;
         string fundingRates;
         string markPrice;
-        uint timeIndex;
     }
 
     // Mapping thời gian -> sàn -> token -> FlowData
@@ -26,12 +26,14 @@ contract FundingRates8H {
     // Ghi nhận dữ liệu vào smart contract theo  8h
     function recordFlow(uint256 timestamp, string memory fundingRates, string memory markPrice ,string calldata tokenSymbol, string calldata exchangeName) external {
         uint256 timeIndex = getTimeKey(timestamp); 
+        uint256 formatKey =formatTimestamp(timeIndex);
         FlowData storage flow= flowRecords[timeIndex][exchangeName][tokenSymbol];
         flow.fundingRates = fundingRates;
         flow.markPrice = markPrice;
-        flow.timeIndex=timeIndex;
+        flow.symbol=tokenSymbol;
+        flow.timestamp=formatKey;
 
-        emit FlowTotalRecorded(timeIndex, tokenSymbol, exchangeName, fundingRates,markPrice );
+        emit FlowTotalRecorded(formatKey, tokenSymbol, exchangeName, fundingRates,markPrice );
     }
 
     // Lấy danh sách vào/ra theo từng mốc 8h trong khoảng thời gian từ startTimestamp đến endTimestamp
