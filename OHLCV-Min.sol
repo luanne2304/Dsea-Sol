@@ -1,8 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-//1 tuần bắt đầu từ thứ 5 00h00
-contract OHLCVWeek {
+contract OHLCV6H {
     struct FormData {
         //precent = ((open/close)-1)*100
         string symbol;
@@ -43,11 +42,11 @@ contract OHLCVWeek {
 
     // Hàm lấy khóa thời gian
     function getTimeKey(uint256 timestamp) internal pure returns (uint256) {
-        return timestamp / 7 days;
+        return timestamp / 1 minutes;
     }
 
     function formatTimestamp(uint256 timeIndex) internal pure returns (uint256) {
-        return timeIndex * 7 days; 
+        return timeIndex * 1 minutes; 
     }
 
     function addSymbolToCategory(string calldata category, string memory symbol) external {

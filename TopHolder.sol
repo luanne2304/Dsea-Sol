@@ -26,7 +26,7 @@ contract TopHolder {
         emit updHolders(coin,  holders[coin][tokenIndexCount[coin]] );
     }
 
-    // Lấy tất cả holders của một ID cụ thể
+    // Lấy tất cả holders của một ID cụ thể (Truyền 0 vào ID để lấy danh sách hiện tại)
     function getHolders(string memory coin,uint256 _id) public view returns (Holder[] memory) {
         if(_id > 0 && _id <= tokenIndexCount[coin]){
              return holders[coin][_id];

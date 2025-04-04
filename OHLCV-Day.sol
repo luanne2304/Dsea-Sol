@@ -26,6 +26,11 @@ contract OHLCVDay {
     // Mapping thời gian -> string symbol -> FormData
     mapping(uint256 => mapping(string => FormData)) internal Records;
 
+    //loai ->[]string symbol
+    mapping(string => string[] ) public listSymbolbyCate;
+    //loai ->string symbol -> exist
+    mapping(string => mapping(string => bool)) public listSymbolbyCateCheck;
+
     //mapping symbol -> gia cao nhất
     mapping(string => PriceRecord) public highestPrice;
     mapping(string => PriceRecord) public lowestPrice;
@@ -47,7 +52,13 @@ contract OHLCVDay {
         return timeIndex * 1 days; 
     }
 
-
+    function addSymbolToCategory(string calldata category, string memory symbol) external {
+        // Kiểm tra nếu symbol chưa có trong mảng của NameCate
+        bool symbolExists = listSymbolbyCateCheck[category][symbol];
+        require(symbolExists==false,"is Exists!");
+        listSymbolbyCateCheck[category][symbol]=true;
+        listSymbolbyCate[category].push(symbol);
+    }
 
     function recordData(
         FormData memory formData

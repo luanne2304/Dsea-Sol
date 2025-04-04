@@ -1,8 +1,10 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
+// truyền vào để lưu thì nè ngày 1,2,3 của tháng
 contract OHLCVMonth {
     struct FormData {
+        //precent = ((open/close)-1)*100
         string symbol;
         uint openTime;
         uint open;
@@ -17,11 +19,22 @@ contract OHLCVMonth {
         string takerBuyQuoteVol;
     }
 
+    struct PriceRecord {
+        uint time;
+        uint price;
+    }
+
     // Mapping thời gian -> string symbol -> FormData
     mapping(uint256 => mapping(string => FormData)) internal Records;
 
-    mapping(string => uint256) internal symbolID;
+    //loai ->[]string symbol
+    mapping(string => string[] ) public listSymbolbyCate;
+    //loai ->string symbol -> exist
+    mapping(string => mapping(string => bool)) public listSymbolbyCateCheck;
 
+    
+    //Lưu tên symbol 
+    mapping(string => uint256) internal symbolID;
     string[] allSymbols;
 
     event Recorded(
@@ -35,9 +48,16 @@ contract OHLCVMonth {
 
     function formatTimestamp(uint256 timeIndex) internal pure returns (uint256) {
         return timeIndex * 2629776; 
+        // 31557312
     }
 
-
+    function addSymbolToCategory(string calldata category, string memory symbol) external {
+        // Kiểm tra nếu symbol chưa có trong mảng của NameCate
+        bool symbolExists = listSymbolbyCateCheck[category][symbol];
+        require(symbolExists==false,"is Exists!");
+        listSymbolbyCateCheck[category][symbol]=true;
+        listSymbolbyCate[category].push(symbol);
+    }
 
     function recordData(
         FormData memory formData
